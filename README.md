@@ -1,7 +1,9 @@
 When using this code, please cite:
 Van Hilten, N.; Verwei, N.; Methorst, J.; Nase, C.; Bernatavicius, A.; Risselada, H.J., Bioinformatics, 2024, 40(2) DOI: 10.1093/bioinformatics/btae069 
 
-This repo contains:
+This fork is modified to do bulk processing of peptide or protein sequences and heavily minimise outputs.
+
+The original repo contains:
 - data/training_set.txt			sequence and MD-calculated ddF for 53,940 sequences in the training set
 - data/validation_set.txt		sequence, predicted ddF, MD-calculated ddF, and squared error (SE) for 494 sequences in the validation set
 - data/test_set.txt			sequence, predicted ddF, MD-calculated ddF, and squared error (SE) for 493 sequences in the test set

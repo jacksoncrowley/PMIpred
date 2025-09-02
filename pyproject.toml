@@ -1,0 +1,10 @@
+[project]
+name = "pmipred"
+version = "0.1.0"
+description = "A fork of the PMIPred module focussed on bulk processing."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "keras==2.15.0",
+    "tensorflow==2.15.0",
+]
