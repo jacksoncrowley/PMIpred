@@ -44,6 +44,33 @@ def check_sequence(seq):
 
     return True, seq
 
+def calc_dF_sm(ddF): # Calculate dF_sm_R50: the membrane-binding free energy to a typical liposome (R=50)
+    a = 3.83 # calibration ddF_ vs dF_sm_infty
+    b = 12.27 # calibration ddF vs dF_sm_infty
+    e = 0.165 # relative strain used in ddF calculation
+    R = 50 # typical liposome radius
+    dF_sm_R50 = a*ddF+b + (ddF/e)*( (1/R**2) + (2/R) )
+    return dF_sm_R50
+
+def calc_Pm(ddF, R):
+    N_A = 6.022E23 # avogadro constant in mol-1
+    V = 1E24 # volume in nm3 (1 liter)
+    A_lip = 0.64 # area per lipid in nm2
+    conc = 0.001 # [0.0001, 0.005] # concentrations in M
+    Vp = 5*1*1 # peptide volume in nm3
+    Ap = 5*1 # peptide area in nm2
+    kT = 2.479 # kJ/mol
+    A = 1/2 * conc*N_A*A_lip
+    Ns = V/Vp
+    Nm = A/Ap
+
+    a = 3.83
+    b = 12.27
+    e = 0.165
+
+    Pm = 1/(1+(Ns/Nm)*np.exp((a*ddF+b+(ddF/e)*( (1/R**2) + (2/R) ))/kT))
+    return Pm
+
 def parse_evomd(evomd):
     assert os.path.isfile(evomd)
 
@@ -85,9 +112,12 @@ for seq in tqdm(sequences):
    
     # predict ddF
     ddF = gf.predict_ddF(model, tokenizer, seq)
+
+    dF_sm_R50 = calc_dF_sm(ddF)
+    Pm_R50 = calc_Pm(ddF,50)
     
     # printing output
-    output += f"{seq}, {ddF}\n"
+    output += f"{seq}, {ddF}, {dF_sm_R50}, {Pm_R50}\n"
 
 with open(args.output, "w") as f:
     f.write(output)
